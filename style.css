@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(180deg, #071421 0%, #0f1724 100%);
+    color: #eef2ff;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    overflow: hidden;
+}
+
+
+
+section {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+
+.infos {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+
+
+.info {
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 18px rgba(2,6,23,0.5);
+    font-weight: 600;
+}
+
+
+
+/* board: fixed square for reliable grid calculations */
+.board {
+    width: min(92vmin, 1000px);
+    height: min(92vmin, 1000px);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    margin: 18px auto;
+    display: grid;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+
+
+/* this is one single square on the grid */
+.block {
+    border: 0.5px solid rgba(255,255,255,0.03);
+}
+
+/* snake parts styling */
+.block.fill {
+    border-radius: 8px;
+    position: relative;
+    background: linear-gradient(180deg,#a7f3d0 0%, #059669 100%);
+    transition: transform 80ms linear, box-shadow 120ms linear;
+}
+.block.head {
+    background: linear-gradient(180deg,#b7f7d8 0%, #10b981 100%);
+    box-shadow: 0 2px 10px rgba(2,6,23,0.4) inset;
+}
+.block.head::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle at 30% 30%, #fff, #000 60%);
+    border-radius: 50%;
+}
+.block.head-up::after { top: 6px; left: 50%; transform: translateX(-50%); }
+.block.head-right::after { right: 6px; top: 50%; transform: translateY(-50%); }
+.block.head-down::after { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.block.head-left::after { left: 6px; top: 50%; transform: translateY(-50%); }
+}
+.block.tail { opacity: 0.95; filter: saturate(0.9); }
+
+/* control pad */
+.controls { position: fixed; top: 50%; transform: translateY(-50%); z-index: 200; pointer-events: none; }
+.controls .pad { pointer-events: auto; display:flex; flex-direction:column; gap:8px; align-items:center; }
+.controls .ctrl { width:56px; height:56px; border-radius:12px; border:none; background: rgba(0,0,0,0.45); color: white; font-size:18px; display:flex; align-items:center; justify-content:center; box-shadow: 0 8px 20px rgba(2,6,23,0.6); }
+.controls .ctrl-row { display:flex; gap:8px; }
+.controls.hidden { display:none; }
+
+/* small screens: place pad bottom-center */
+@media (max-width: 600px) {
+    .controls { left: 50%; transform: translate(-50%,-50%); bottom: 20px; top: auto; }
+}
+
+
+
+/* this turns a square WHITE. this is what the snake is made of */
+.fill {
+    background-color: #e6f4ff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25) inset;
+}
+
+
+
+/* this turn a square RED and makes it round like a cherry */
+.food {
+    background: radial-gradient(circle at 30% 30%, #ffdada, #ff3b3b 60%);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(255,59,59,0.25) inset;
+}
+
+
+
+/* this make the background dark and blurry when the game isn't running so you can focus on the button */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+
+
+.start-game,
+.game-over {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    padding: 28px 36px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    min-width: 320px;
+}
+
+
+
+.game-over { display: none; }
+
+
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #60a5fa;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 6px 18px rgba(59,130,246,0.25);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+button:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(59,130,246,0.28); }
+
+.btn-start { background: linear-gradient(90deg,#7c3aed,#06b6d4); }
+.btn-restart { background: linear-gradient(90deg,#ef4444,#fb7185); }
